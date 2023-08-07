@@ -8,6 +8,9 @@ const URL = 'https://api.spotify.com'
 
 function Music(props){
     const [songs,setSongs] = useState([])
+    const [audio,setAudio] = useState(null) /*audio player*/
+    const [preUrl,setPreUrl] = useState(false) /* url */
+    const [playing,setPlaying] = useState(false) /* play or pause */
 
     const params = useParams()
 
@@ -29,6 +32,41 @@ function Music(props){
         searchTracks()
     },[])
 
+    /* audio play and pause logic */
+    const playAudio = (url) => {
+        const myAudio = new Audio(url);
+        if(!playing){
+            // initial play
+            myAudio.play()
+            setPlaying(true)
+            setAudio(myAudio)
+            setPreUrl(url)
+        } else {
+            // pause
+            audio.pause()
+            if(preUrl === url ) {
+                setPlaying(false)
+            }else {
+                // pause to play
+                myAudio.play()
+                setPlaying(true)
+                setAudio(myAudio)
+                setPreUrl(url)
+            }
+        }
+    }
+
+    const genIcon = (url) => {
+        if( !url) //if song url is not present
+           return <span className="text-danger"> <i className="bi bi-bell-slash-fill"></i> </span>
+        if(playing && preUrl === url) // song is playing
+            return <span className="text-warning"> <i className="bi bi-pause-circle"></i> </span>  
+         return <span className="text-success"> <i className="bi bi-play-circle"></i> </span>
+    }
+
+   
+
+
     return(
         <div className="container">
             <div className="row mt-5">
@@ -40,7 +78,7 @@ function Music(props){
                 {
                     songs && songs.map((item,index) => {
                         return(
-                            <SongItem key={index} {...item} />
+                            <SongItem key={index} {...item} iconHandler={genIcon} songHandler={playAudio} />
                         )
                     })
                 }

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import key from "../config/token";
 import "./styles/Home.css"
 import Artist from "./Artist";
+import Search from "./screens/Search";
 
 
 const URL = 'https://api.spotify.com'
@@ -51,9 +52,12 @@ function Home(props){
     return(
        <section id="home-banner">
          <div className="container d-flex align-items-center justify-content-center">
-            <div className="row mt-5">
+            <div className="row">
                 <div className="col-md-12 text-center">
-                    <h1 className="display-3 text-light">MUSICO</h1>
+                    <h3 className="display-3 text-light">MUSICO</h3>
+
+                            <Search sArtist={searchArtist} />
+
                 </div>
             </div>
          </div>
@@ -67,7 +71,7 @@ function Home(props){
                 {
                     artist && artist.map((item,index) => {
                         return (
-                            <Artist key={index} {...item} />
+                            <Artist key={index} {...item}  />
                         )
                     })
                 }
